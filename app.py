@@ -12,7 +12,7 @@ VERSION = os.environ.get("APP_VERSION", "dev")
 
 def bill(item, qty):
     price = MENU[item] * qty
-    gst = round(price * GST, 2)
+    gst = round(price * GST)
     return {"item": item, "qty": qty, "price": price, "gst": gst, "total": round(price + gst, 2)}
 
 
