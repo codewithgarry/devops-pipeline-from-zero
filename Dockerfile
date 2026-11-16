@@ -6,4 +6,5 @@ COPY app.py .
 RUN useradd --create-home appuser
 USER appuser
 EXPOSE 8000
+HEALTHCHECK --interval=10s --timeout=3s CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "app:app"]

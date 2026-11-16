@@ -17,4 +17,4 @@ def test_unknown_item():
 
 
 def test_health():
-    assert app.test_client().get("/health").get_json() == {"status": "ok"}
+    assert app.test_client().get("/health").get_json()["status"] == "ok"

@@ -1,9 +1,13 @@
+import os
+
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
 MENU = {"chai": 20, "coffee": 40, "samosa": 15}
-GST = 0.05
+SHOP = os.environ.get("SHOP_NAME", "Chai shop")
+GST = float(os.environ.get("GST_RATE", "0.05"))
+VERSION = os.environ.get("APP_VERSION", "dev")
 
 
 def bill(item, qty):
@@ -14,7 +18,7 @@ def bill(item, qty):
 
 @app.get("/")
 def home():
-    return f"Chai shop is open: {", ".join(MENU)}\n"
+    return f"{SHOP} is open: {", ".join(MENU)}\n"
 
 
 @app.get("/menu")
@@ -33,7 +37,7 @@ def order():
 
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    return {"status": "ok", "version": VERSION}
 
 
 if __name__ == "__main__":
