@@ -1,0 +1,73 @@
+{
+  "title": "Chai shop",
+  "uid": "chai-shop",
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "refresh": "10s",
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Orders per minute",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 16,
+        "h": 9
+      },
+      "targets": [
+        {
+          "expr": "sum by (item) (rate(chai_orders_total[2m])) * 60",
+          "legendFormat": "{{item}}"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Pods answering",
+      "gridPos": {
+        "x": 16,
+        "y": 0,
+        "w": 8,
+        "h": 9
+      },
+      "targets": [
+        {
+          "expr": "sum(up{job=\"chai-shop\"})"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Orders today",
+      "gridPos": {
+        "x": 0,
+        "y": 9,
+        "w": 12,
+        "h": 6
+      },
+      "targets": [
+        {
+          "expr": "sum(increase(chai_orders_total[24h]))"
+        }
+      ]
+    },
+    {
+      "type": "timeseries",
+      "title": "Pod restarts",
+      "gridPos": {
+        "x": 12,
+        "y": 9,
+        "w": 12,
+        "h": 6
+      },
+      "targets": [
+        {
+          "expr": "sum by (pod) (kube_pod_container_status_restarts_total{namespace=\"default\", pod=~\"chai-shop.*\"})",
+          "legendFormat": "{{pod}}"
+        }
+      ]
+    }
+  ]
+}
