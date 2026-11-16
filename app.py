@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask, jsonify, request
+from prometheus_client import CONTENT_TYPE_LATEST, Counter, generate_latest
 
 app = Flask(__name__)
 
@@ -8,6 +9,7 @@ MENU = {"chai": 20, "coffee": 40, "samosa": 15}
 SHOP = os.environ.get("SHOP_NAME", "Chai shop")
 GST = float(os.environ.get("GST_RATE", "0.05"))
 VERSION = os.environ.get("APP_VERSION", "dev")
+ORDERS = Counter("chai_orders_total", "Orders placed", ["item"])
 
 
 def bill(item, qty):
@@ -32,12 +34,18 @@ def order():
     item, qty = data.get("item"), int(data.get("qty", 1))
     if item not in MENU:
         return jsonify(error=f"we do not sell {item}"), 404
+    ORDERS.labels(item).inc(qty)
     return jsonify(bill(item, qty))
 
 
 @app.get("/health")
 def health():
     return {"status": "ok", "version": VERSION}
+
+
+@app.get("/metrics")
+def metrics():
+    return generate_latest(), 200, {"Content-Type": CONTENT_TYPE_LATEST}
 
 
 if __name__ == "__main__":

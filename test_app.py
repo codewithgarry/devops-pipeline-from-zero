@@ -18,3 +18,6 @@ def test_unknown_item():
 
 def test_health():
     assert app.test_client().get("/health").get_json()["status"] == "ok"
+def test_metrics_count_orders():
+    app.test_client().post("/order", json={"item": "chai", "qty": 2})
+    assert b'chai_orders_total{item="chai"}' in app.test_client().get("/metrics").data
