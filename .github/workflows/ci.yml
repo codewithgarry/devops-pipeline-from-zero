@@ -17,6 +17,8 @@ jobs:
 
   image:
     needs: test
+    env:
+      DOCKER_BUILD_RECORD_UPLOAD: false   # no build-record artifact: it fills the account's artifact storage
     if: github.event_name == 'push'
     runs-on: ${{ vars.RUNNER || 'ubuntu-latest' }}
     steps:
@@ -27,6 +29,16 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          load: true
+          tags: chai-shop:scan
+      - uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: chai-shop:scan
+          severity: CRITICAL
+          exit-code: "1"
+          ignore-unfixed: true
       - uses: docker/build-push-action@v6
         with:
           push: true
