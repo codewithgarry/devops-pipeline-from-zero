@@ -9,7 +9,7 @@ spec:
     - name: chai-shop
       rules:
         - alert: ChaiShopDown
-          expr: sum(up{job="chai-shop"}) == 0
+          expr: absent(up{job="chai-shop"} == 1)
           for: 1m
           labels:
             severity: critical
