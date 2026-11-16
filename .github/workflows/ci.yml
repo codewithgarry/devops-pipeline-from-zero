@@ -5,9 +5,12 @@ on:
   pull_request:
 
 jobs:
-  hello:
+  test:
     runs-on: ${{ vars.RUNNER || 'ubuntu-latest' }}
     steps:
-      - uses: actions/checkout@v4
-      - run: echo "Hello from GitHub Actions"
-      - run: ls
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt -r requirements-dev.txt
+      - run: pytest -v
