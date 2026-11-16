@@ -50,3 +50,4 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/chai-shop:${{ github.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/chai-shop:latest
           cache-from: type=gha
+          cache-to: type=gha,mode=max   # both platforms: the slow emulated amd64 build is cached too
