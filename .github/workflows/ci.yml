@@ -34,8 +34,7 @@ jobs:
         with:
           load: true
           tags: chai-shop:scan
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=push   # read the cache the push build wrote; writing it here cost two minutes
       - uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: chai-shop:scan
@@ -49,5 +48,5 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/chai-shop:${{ github.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/chai-shop:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max   # both platforms: the slow emulated amd64 build is cached too
+          cache-from: type=gha,scope=push
+          cache-to: type=gha,mode=max,scope=push   # one cache, both platforms (the slow emulated amd64 build too)
