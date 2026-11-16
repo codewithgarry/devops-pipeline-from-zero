@@ -2,6 +2,7 @@ name: ci
 on:
   push:
     branches: [main]
+    paths-ignore: ["k8s/**"]   # a manifest-only change (a rollback, a scale) goes straight to Argo CD, no image build
   pull_request:
 
 jobs:
@@ -60,7 +61,7 @@ jobs:
       - run: |
           sed -i "s|newTag: .*|newTag: ${{ github.sha }}|" k8s/app/kustomization.yaml
       - run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "${{ github.actor }}"   # the person who pushed: the commit is theirs, not a bot's
+          git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
           git commit -am "deploy ${{ github.sha }}"
           git push
