@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chai-shop
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: chai-shop
+  template:
+    metadata:
+      labels:
+        app: chai-shop
+    spec:
+      containers:
+        - name: chai-shop
+          image: docker.io/codewithgarry/chai-shop
+          ports:
+            - containerPort: 8000
+          env:
+            - name: SHOP_NAME
+              value: Chai shop
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
