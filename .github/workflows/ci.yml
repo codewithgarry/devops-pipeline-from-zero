@@ -33,8 +33,7 @@ jobs:
       - uses: docker/build-push-action@v6
         with:
           load: true
-          tags: chai-shop:scan
-          cache-from: type=gha,scope=push   # read the cache the push build wrote; writing it here cost two minutes
+          tags: chai-shop:scan   # no cache here: measured, this native build takes 17 s, fetching the cache took 146 s
       - uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: chai-shop:scan
