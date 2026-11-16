@@ -3,4 +3,4 @@ resources:
   - service.yaml
 images:
   - name: docker.io/codewithgarry/chai-shop
-    newTag: f954e1665ec552593585aa4ccf44c6c851c63b7c
+    newTag: 517ba038db4aed929cfe20cf4e8ad6d9083eedc3
