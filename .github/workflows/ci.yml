@@ -12,6 +12,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
+          cache: pip
       - run: pip install -r requirements.txt -r requirements-dev.txt
       - run: pytest -v
 
@@ -33,6 +34,8 @@ jobs:
         with:
           load: true
           tags: chai-shop:scan
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
       - uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: chai-shop:scan
@@ -46,3 +49,4 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/chai-shop:${{ github.sha }}
             ${{ secrets.DOCKERHUB_USERNAME }}/chai-shop:latest
+          cache-from: type=gha
